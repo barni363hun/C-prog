@@ -1,0 +1,10 @@
+{
+  "tasks": [
+    {
+      "label": "commit",
+      "type": "shell",
+      "command": "./commit.sh",
+      "group": "commit"
+    }
+  ]
+}
