@@ -4,6 +4,4 @@
 
 ## run program with: ctrl+alt+N
 
-git add . && git commit -a -m "qt.txt" && git push
-
-sd
+NOW=`date '+%F_%H:%M:%S'` && git add . && git commit -a -m $NOW && git push
