@@ -1,0 +1,3 @@
+rename: ctrl+shift+R
+build: ctrl+B
+run: ctrl+R
