@@ -4,5 +4,6 @@
 
 tasks:
   - init: make
-
-
+  - command: apt install gcc
+  - command: apt install g++
+  - command: apt install gdb
