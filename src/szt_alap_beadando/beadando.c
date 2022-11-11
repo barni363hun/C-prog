@@ -27,7 +27,7 @@ A program irja ki egy TXT file-ba (output.txt) a m¶velet eredményét.
 502 (0x1F6)
 =
 500 (0x1F4)
-Mellékeljen m¶veletenként 1-2 darab bemeneti minta file-t.
+Mellékeljen műveletenként 1-2 darab bemeneti minta file-t.
 Dr. Fodor Attila, Dr. Görbe Péter (Pannon Egyetem)A számítástechnika alapjai
 2022. 3 / 3
 
@@ -49,28 +49,29 @@ struct MyResult sum(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   int leftover = 0;
   int current_sum = 0;
   // printf("res arr lenght: %d\n",res_arr_size);
-
-  while (res_arr_i >= 0) {
-    if (arr1_i > arr2_i) {
-      res_arr[res_arr_i] = arr1[res_arr_i];
-      arr1_i--;
-      printf("%d+_=%d\n", arr1[res_arr_i], res_arr[res_arr_i]);
-    } else if (arr2_i > arr1_i) {
-      res_arr[res_arr_i] = arr2[res_arr_i];
-      arr2_i--;
-      printf("_+%d=%d\n", arr2[res_arr_i], res_arr[res_arr_i]);
-    } else {
-      current_sum = arr1[res_arr_i] + arr2[res_arr_i];
-      if (current_sum >= 10) {
-        leftover = 1;
-        current_sum = current_sum - 10;
+  /*
+    while (res_arr_i >= 0) {
+      if (arr1_i > arr2_i) {
+        res_arr[res_arr_i] = arr1[res_arr_i];
+        arr1_i--;
+        printf("%d+_=%d\n", arr1[res_arr_i], res_arr[res_arr_i]);
+      } else if (arr2_i > arr1_i) {
+        res_arr[res_arr_i] = arr2[res_arr_i];
+        arr2_i--;
+        printf("_+%d=%d\n", arr2[res_arr_i], res_arr[res_arr_i]);
+      } else {
+        current_sum = arr1[res_arr_i] + arr2[res_arr_i];
+        if (current_sum >= 10) {
+          leftover = 1;
+          current_sum = current_sum - 10;
+        }
+        res_arr[res_arr_i] = current_sum;
+        printf("%d+%d=%d\n", arr1[res_arr_i], arr2[res_arr_i],
+               res_arr[res_arr_i]);
       }
-      res_arr[res_arr_i] = current_sum;
-      printf("%d+%d=%d\n", arr1[res_arr_i], arr2[res_arr_i],
-             res_arr[res_arr_i]);
+      res_arr_i = res_arr_i - 1;
     }
-    res_arr_i = res_arr_i - 1;
-  }
+    */
   struct MyResult res;
   res.res_arr = res_arr;
   res.res_arr_size = res_arr_size;
@@ -87,6 +88,7 @@ int main() {
   unsigned int arr2_size = 0;
   arr1 = calloc(arr1_size, sizeof(int));
   arr2 = calloc(arr2_size, sizeof(int));
+  FILE *ifp = fopen("input.txt", "r");
   if (arr1 == NULL) {
     fprintf(stderr, "Array 1 not allocated");
   }
@@ -138,25 +140,3 @@ int main() {
 
   return 0;
 }
-
-/*
-struct block{
-    int num;
-    int* p;
-};
-    int start = 10;
-    char c = '0';
-    //char operator;
-    //int num2;
-    scanf("%c",&c);
-    //printf("%c",c);
-    printf("%d", (int)(c)-48);
-    if((int)(c)-48>=0){
-
-    }
-
-    while((int)(c)-48 >= 0){
-        scanf("%c",&c);
-
-    }
-    */
