@@ -66,7 +66,6 @@ struct MyResult sum(int *arr1, int *arr2, int arr1_size, int arr2_size) {
     if (arr1 == NULL) {
       fprintf(stderr, "Array not reallocated");
     }
-
   } else if (arr2_size < res_arr_size) {
     for (i = 0; i <= arr2_i; i++) {
       tmp_arr[res_arr_i - i] = arr2[arr2_i - i];
@@ -176,11 +175,76 @@ struct MyResult subtract(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   return res;
 }
 struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
+  // init
+  int *res_arr;
+  int longer_size = (arr1_size > arr2_size) ? arr1_size : arr2_size;
+  int *tmp_arr = calloc(longer_size, sizeof(int));
+  int arr1_i = arr1_size - 1;
+  int arr2_i = arr2_size - 1;
+  int i;
+  int longer_i = longer_size - 1;
 
-  // return result array and its lenght as a struct
+  // left padding the shorter input array with 0's
+  if (arr1_size < longer_size) {
+    for (i = 0; i <= arr1_i; i++) {
+      tmp_arr[longer_i - i] = arr1[arr1_i - i];
+    }
+
+    arr1_size = longer_size;
+    arr1 = realloc(tmp_arr, arr1_size * sizeof(int));
+    if (arr1 == NULL) {
+      fprintf(stderr, "Array not reallocated");
+    }
+  } else if (arr2_size < longer_size) {
+    for (i = 0; i <= arr2_i; i++) {
+      tmp_arr[longer_i - i] = arr2[arr2_i - i];
+    }
+
+    arr2_size = longer_size;
+    arr2 = realloc(tmp_arr, arr2_size * sizeof(int));
+    if (arr2 == NULL) {
+      fprintf(stderr, "Array not reallocated");
+    }
+  }
+
+  int res_arr_size = longer_size * 2;
+
+  res_arr = calloc(res_arr_size, sizeof(int));
+  int leftover = 0;
+  int current_mult = 0;
   struct MyResult res;
-  res.res_arr = arr1;
-  res.res_arr_size = arr1_size;
+
+  int *add1 = calloc(longer_size + 1, sizeof(int));
+  int *add2 = calloc(res_arr_size, sizeof(int));
+  int j;
+  int thens;
+  struct MyResult add_res;
+  j = 1;
+  // for (j = 0; j < longer_size; j++) {
+  for (i = 0; i < longer_size; i++) {
+    current_mult = arr1[longer_size - 1 - i] * arr2[j];
+    printf("%d*%d=%d\n", arr1[longer_size - 1 - i], arr2[j], current_mult);
+    // cuz i cant use '%' operator i need to do it by hand
+
+    add1[longer_size - i] =
+        (current_mult - (10 * ((int)(current_mult / 10)))) + leftover;
+    leftover = (int)(current_mult / 10);
+    printf("leirom a %d továbbviszek %d\n", add1[longer_size - i], leftover);
+  }
+  if (leftover != 0) {
+    add1[0] = leftover;
+  }
+  add2 = add1;
+
+  // TODO: this
+  // add_res = sum(add1, add2, longer_size + 1, res_arr_size);
+  // res_arr_size = add_res.res_arr_size;
+  // sum(int *arr1, int *arr2, int arr1_size, int arr2_size) {
+  //}
+  // arr1_size = (int)(32 / 10);
+  // return result array and its lenght as a struct
+  res.res_arr = add1;
+  res.res_arr_size = longer_size + 1;
   res.is_negative = 0;
   return res;
 }
@@ -291,8 +355,8 @@ int main() {
 
   // write out result without leading 0's
   for (i = 0; i < result.res_arr_size; i++) {
+    is_leading_0s_ended = 1;
     if (((result.res_arr[i]) + '0') != '0') {
-      is_leading_0s_ended = 1;
     }
     if (is_leading_0s_ended) {
       fputc((result.res_arr[i]) + '0', ofp);
