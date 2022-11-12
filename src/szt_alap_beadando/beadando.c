@@ -34,12 +34,14 @@ Dr. Fodor Attila, Dr. Görbe Péter (Pannon Egyetem)A számítástechnika alapja
 *******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
+// result array and its lenght as a struct
 struct MyResult {
   int *res_arr;
   int res_arr_size;
 };
 
 struct MyResult sum(int *arr1, int *arr2, int arr1_size, int arr2_size) {
+  // init
   int *res_arr;
   int res_arr_size = (arr1_size > arr2_size) ? arr1_size : arr2_size;
   res_arr = calloc(res_arr_size, sizeof(int));
@@ -51,10 +53,7 @@ struct MyResult sum(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   int *tmp_arr = calloc(res_arr_size, sizeof(int));
   int i;
 
-  // printf("res arr lenght: %d\n", res_arr_size);
-  // printf("arr1 lenght: %d\n", arr1_size);
-  // printf("arr2 lenght: %d\n", arr2_size);
-
+  // left padding the shorter input array with 0's
   if (arr1_size < res_arr_size) {
     for (i = 0; i <= arr1_i; i++) {
       tmp_arr[res_arr_i - i] = arr1[arr1_i - i];
@@ -67,9 +66,7 @@ struct MyResult sum(int *arr1, int *arr2, int arr1_size, int arr2_size) {
     }
 
   } else if (arr2_size < res_arr_size) {
-    // printf("arr2 i: %d\n", arr2_i);
     for (i = 0; i <= arr2_i; i++) {
-      // printf("asdfasdfd %d\n", arr2[arr2_i - i]);
       tmp_arr[res_arr_i - i] = arr2[arr2_i - i];
     }
 
@@ -80,16 +77,8 @@ struct MyResult sum(int *arr1, int *arr2, int arr1_size, int arr2_size) {
     }
   }
 
+  // add the two arrays like you would on paper
   while (res_arr_i >= 0) {
-    // if (arr1_i > arr2_i) {
-    //   res_arr[res_arr_i] = arr1[res_arr_i];
-    //   arr1_i--;
-    //   printf("%d+_=%d\n", arr1[res_arr_i], res_arr[res_arr_i]);
-    // } else if (arr2_i > arr1_i) {
-    //   res_arr[res_arr_i] = arr2[res_arr_i];
-    //   arr2_i--;
-    //   printf("_+%d=%d\n", arr2[res_arr_i], res_arr[res_arr_i]);
-    // } else {
     current_sum = arr1[res_arr_i] + arr2[res_arr_i] + leftover;
     if (current_sum >= 10) {
       leftover = 1;
@@ -98,22 +87,45 @@ struct MyResult sum(int *arr1, int *arr2, int arr1_size, int arr2_size) {
       leftover = 0;
     }
     res_arr[res_arr_i] = current_sum;
-    printf("%d+%d=%d\n", arr1[res_arr_i], arr2[res_arr_i], res_arr[res_arr_i]);
-
+    // printf("%d+%d=%d\n", arr1[res_arr_i], arr2[res_arr_i],
+    // res_arr[res_arr_i]);
     res_arr_i = res_arr_i - 1;
   }
-
-  // printf("---%d---", arr2[arr2_size - ]);
+  // return result array and its lenght as a struct
   struct MyResult res;
   res.res_arr = res_arr;
   res.res_arr_size = res_arr_size;
+  return res;
+}
+struct MyResult subtract(int *arr1, int *arr2, int arr1_size, int arr2_size) {
 
+  // return result array and its lenght as a struct
+  struct MyResult res;
+  res.res_arr = arr1;
+  res.res_arr_size = arr1_size;
+  return res;
+}
+struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
+
+  // return result array and its lenght as a struct
+  struct MyResult res;
+  res.res_arr = arr1;
+  res.res_arr_size = arr1_size;
+  return res;
+}
+struct MyResult divide(int *arr1, int *arr2, int arr1_size, int arr2_size) {
+
+  // return result array and its lenght as a struct
+  struct MyResult res;
+  res.res_arr = arr1;
+  res.res_arr_size = arr1_size;
   return res;
 }
 
 int main() {
-  int *arr1;
-  int *arr2;
+  // init
+  int *arr1; // first input number
+  int *arr2; // second input number
   char c;
   int i;
   char operator;
@@ -142,7 +154,8 @@ int main() {
   if (arr2 == NULL) {
     fprintf(stderr, "Array 2 not allocated");
   }
-  c = fgetc(ifp);
+  c = fgetc(ifp); // read in first character of first number
+  // read numbers until we foud '\n' character
   while ((int)(c)-48 >= 0) {
     arr1_size++;
     arr1 = realloc(arr1, arr1_size * sizeof(int));
@@ -152,16 +165,18 @@ int main() {
     arr1[arr1_size - 1] = (int)(c)-48;
     c = fgetc(ifp);
   }
+  // write out first number
   for (i = 0; i < arr1_size; i++) {
     fputc((arr1[i]) + '0', ofp);
-    // printf("%d", arr1[i]);
   }
+  // read and write out operator
   operator= fgetc(ifp);
   fputc('\n', ofp);
   fputc(operator, ofp);
   fputc('\n', ofp);
   // printf("\n%c\n", operator);
-  c = fgetc(ifp);
+  c = fgetc(ifp); // read in first character of first number
+  // read numbers until we reach the end of the file
   while (file_end != 1) {
     c = fgetc(ifp);
     if (!feof(ifp)) {
@@ -175,20 +190,33 @@ int main() {
       file_end = 1;
     }
   }
+
+  // write out second number
   for (i = 0; i < arr2_size; i++) {
     fputc((arr2[i]) + '0', ofp);
   }
+  // write out '=' sign
   fputc('\n', ofp);
   fputc('=', ofp);
   fputc('\n', ofp);
-  result = sum(arr1, arr2, arr1_size, arr2_size);
-  // printf("my res_lenght:%d", res.res_arr_size);
 
-  for (i = 0; i < result.res_arr_size; i++) {
-    fputc((result.res_arr[i]) + '0', ofp);
-    // fputc('0', ofp);
+  // get the result based on the operator
+  if (operator== '+') {
+    result = sum(arr1, arr2, arr1_size, arr2_size);
+  } else if (operator== '-') {
+    result = subtract(arr1, arr2, arr1_size, arr2_size);
+  } else if (operator== '*') {
+    result = multiply(arr1, arr2, arr1_size, arr2_size);
+  } else if (operator== '/') {
+    result = divide(arr1, arr2, arr1_size, arr2_size);
   }
 
+  // write out result
+  for (i = 0; i < result.res_arr_size; i++) {
+    fputc((result.res_arr[i]) + '0', ofp);
+  }
+
+  // clode files, free memory
   fclose(ifp);
   fclose(ofp);
   free(arr1);
