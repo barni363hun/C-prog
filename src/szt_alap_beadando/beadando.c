@@ -38,6 +38,7 @@ Dr. Fodor Attila, Dr. Görbe Péter (Pannon Egyetem)A számítástechnika alapja
 struct MyResult {
   int *res_arr;
   int res_arr_size;
+  int is_negative; // boolean
 };
 
 struct MyResult sum(int *arr1, int *arr2, int arr1_size, int arr2_size) {
@@ -52,6 +53,7 @@ struct MyResult sum(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   int current_sum = 0;
   int *tmp_arr = calloc(res_arr_size, sizeof(int));
   int i;
+  struct MyResult res;
 
   // left padding the shorter input array with 0's
   if (arr1_size < res_arr_size) {
@@ -92,17 +94,85 @@ struct MyResult sum(int *arr1, int *arr2, int arr1_size, int arr2_size) {
     res_arr_i = res_arr_i - 1;
   }
   // return result array and its lenght as a struct
-  struct MyResult res;
   res.res_arr = res_arr;
   res.res_arr_size = res_arr_size;
+  res.is_negative = 0;
   return res;
 }
 struct MyResult subtract(int *arr1, int *arr2, int arr1_size, int arr2_size) {
-
-  // return result array and its lenght as a struct
+  // init
+  int *res_arr;
+  int res_arr_size = (arr1_size > arr2_size) ? arr1_size : arr2_size;
+  res_arr = calloc(res_arr_size, sizeof(int));
+  int arr1_i = arr1_size - 1;
+  int arr2_i = arr2_size - 1;
+  int res_arr_i = res_arr_size - 1;
+  int leftover = 0;
+  int current_subt = 0;
+  int *tmp_arr = calloc(res_arr_size, sizeof(int));
+  int tmp;
+  int i;
   struct MyResult res;
-  res.res_arr = arr1;
-  res.res_arr_size = arr1_size;
+  int a, b;
+  int which_bigger = 0; // 0=equal, 1=first, 2=second
+  res.is_negative = 0;
+
+  // left padding the shorter input array with 0's
+  if (arr1_size < res_arr_size) {
+    for (i = 0; i <= arr1_i; i++) {
+      tmp_arr[res_arr_i - i] = arr1[arr1_i - i];
+    }
+    arr1 = realloc(tmp_arr, res_arr_size * sizeof(int));
+    if (arr1 == NULL) {
+      fprintf(stderr, "Array not reallocated");
+    }
+  } else if (arr2_size < res_arr_size) {
+    for (i = 0; i <= arr2_i; i++) {
+      tmp_arr[res_arr_i - i] = arr2[arr2_i - i];
+    }
+    arr2 = realloc(tmp_arr, res_arr_size * sizeof(int));
+    if (arr2 == NULL) {
+      fprintf(stderr, "Array not reallocated");
+    }
+  }
+  // if they are initially the same lenght find out if the second is bigger
+  if (arr1_size == arr2_size) {
+    for (i = 0; i < res_arr_size; i++) {
+      if (which_bigger == 0) {
+        if (arr1[i] > arr2[i])
+          which_bigger = 1;
+        else if (arr1[i] < arr2[i])
+          which_bigger = 2;
+      }
+    }
+  }
+  // if the second number is bigger switch them and switch res.is_negative
+  if (arr2_size > arr1_size || which_bigger == 2) {
+    tmp_arr = arr1;
+    arr1 = arr2;
+    arr2 = tmp_arr;
+    res.is_negative = 1;
+  }
+
+  // subtract the two arrays like you would on paper
+  while (res_arr_i >= 0) {
+    a = arr1[res_arr_i];
+    b = arr2[res_arr_i] + leftover;
+    if (a < b) {
+      a = a + 10;
+      leftover = 1;
+    } else {
+      leftover = 0;
+    }
+    current_subt = a - b;
+    res_arr[res_arr_i] = current_subt;
+    // printf("%d-%d=%d\n", arr1[res_arr_i], arr2[res_arr_i],
+    // res_arr[res_arr_i]);
+    res_arr_i = res_arr_i - 1;
+  }
+  // return result array and its lenght as a struct
+  res.res_arr = res_arr;
+  res.res_arr_size = res_arr_size;
   return res;
 }
 struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
@@ -111,6 +181,7 @@ struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   struct MyResult res;
   res.res_arr = arr1;
   res.res_arr_size = arr1_size;
+  res.is_negative = 0;
   return res;
 }
 struct MyResult divide(int *arr1, int *arr2, int arr1_size, int arr2_size) {
@@ -119,6 +190,7 @@ struct MyResult divide(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   struct MyResult res;
   res.res_arr = arr1;
   res.res_arr_size = arr1_size;
+  res.is_negative = 0;
   return res;
 }
 
@@ -134,6 +206,7 @@ int main() {
   arr1 = calloc(arr1_size, sizeof(int));
   arr2 = calloc(arr2_size, sizeof(int));
   struct MyResult result;
+  int is_leading_0s_ended = 0;
 
   // open files
   FILE *ofp = fopen("output.txt", "w");
@@ -211,9 +284,19 @@ int main() {
     result = divide(arr1, arr2, arr1_size, arr2_size);
   }
 
-  // write out result
+  // write a '-' sign if its neccessary
+  if (result.is_negative == 1) {
+    fputc('-', ofp);
+  }
+
+  // write out result without leading 0's
   for (i = 0; i < result.res_arr_size; i++) {
-    fputc((result.res_arr[i]) + '0', ofp);
+    if (((result.res_arr[i]) + '0') != '0') {
+      is_leading_0s_ended = 1;
+    }
+    if (is_leading_0s_ended) {
+      fputc((result.res_arr[i]) + '0', ofp);
+    }
   }
 
   // clode files, free memory
