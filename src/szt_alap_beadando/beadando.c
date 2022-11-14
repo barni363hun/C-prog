@@ -209,6 +209,7 @@ struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   for (int i = 0; i < arr2_size; i++) {
     for (int j = 0; j < arr1_size + 1; j++) {
       current_mult = (arr2[arr2_i - i] * arr1[arr1_i - j]) + leftover;
+      // because i cant use '%' operator i need to do it by hand
       leftover = (int)(current_mult / 10);
       matrix[sorok - 1 - i][oszlopok - 1 - j - i] =
           current_mult - (leftover * 10);
