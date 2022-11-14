@@ -225,14 +225,14 @@ struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   for (int i = 0; i < sorok; i++) {
     matrix_summed = sum(matrix_summed, matrix[i], oszlopok, oszlopok).res_arr;
   }
-
-  printf("Matrix:\n");
-  for (int i = 0; i < sorok; i++) {
-    for (int j = 0; j < oszlopok; j++)
-      printf("%d", matrix[i][j]);
-    printf("\n");
-  }
-
+  /*
+    printf("Matrix:\n");
+    for (int i = 0; i < sorok; i++) {
+      for (int j = 0; j < oszlopok; j++)
+        printf("%d", matrix[i][j]);
+      printf("\n");
+    }
+  */
   felszabaditMatrix(sorok, oszlopok, matrix);
   res.res_arr = matrix_summed;
   res.res_arr_size = oszlopok;
@@ -243,6 +243,29 @@ struct MyResult divide(int *arr1, int *arr2, int arr1_size, int arr2_size) {
 
   // return result array and its lenght as a struct
   struct MyResult res;
+  int res_arr_size = 0;
+  int *res_arr = calloc(res_arr_size, sizeof(int));
+  int num1 = 0;
+  int i;
+  for (i = 0; i < arr1_size; i++)
+    num1 = 10 * num1 + arr1[i];
+
+  int arr_2_i = 0;
+  int num2 = arr2[0];
+  int is_done = 0;
+  while (is_done == 0) {
+    if (num2 / num1 >= 1) {
+      res_arr_size++;
+      res_arr = realloc(res_arr, res_arr_size * sizeof(int));
+      if (res_arr == NULL) {
+        fprintf(stderr, "Array not reallocated");
+      }
+      res_arr[i] = (int)(c)-48;
+    } else {
+      num2 = (num2 * 10) +
+    }
+  }
+
   res.res_arr = arr1;
   res.res_arr_size = arr1_size;
   res.is_negative = 0;
