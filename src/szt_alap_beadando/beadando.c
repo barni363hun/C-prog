@@ -215,7 +215,7 @@ struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
       matrix[sorok - 1 - i][oszlopok - 1 - j - i] =
           current_mult - (leftover * 10);
       /*
-  printf("[%d][%d] = %d (%d*%d) left: %d\n", sorok - 1 - i,
+  printf("[%d][%d] = %d (%d*%d) leftover: %d\n", sorok - 1 - i,
          oszlopok - 1 - j, current_mult - (leftover * 10), arr2[arr2_i - i],
          arr1[arr1_i - j], leftover);
          */
@@ -250,15 +250,20 @@ struct MyResult divide(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   int ans = 0;
   int divisor = 0;
   int i, j;
+
+  // make the divisor from the array
   for (i = 0; i < arr2_size; i++)
     divisor = 10 * divisor + arr2[i];
 
   int arr1_i = 0;
   int tmp = arr1[arr1_i];
+
+  // find a big enough number to start the division with
   while (tmp < divisor) {
     arr1_i++;
     tmp = tmp * 10 + arr1[arr1_i];
   }
+  // divide like you would on paper
   while (arr1_i < arr1_size) {
     ans = ans * 10 + (int)(tmp / divisor);
     res_arr_size++;
@@ -389,7 +394,7 @@ int main() {
     }
   }
 
-  // clode files, free memory
+  // close files, free memory
   fclose(ifp);
   fclose(ofp);
   free(arr1);
