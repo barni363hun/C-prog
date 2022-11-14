@@ -196,17 +196,12 @@ int **bekerMatrix(int sorok, int oszlopok) {
 
 struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   // init
-  int *res_arr;
-  int longer_size = (arr1_size > arr2_size) ? arr1_size : arr2_size;
-  int *tmp_arr = calloc(longer_size, sizeof(int));
   int arr1_i = arr1_size - 1;
   int arr2_i = arr2_size - 1;
   int i, j;
-  int longer_i = longer_size - 1;
   struct MyResult res;
   int leftover = 0;
   int current_mult;
-
   int sorok = arr2_size;
   int oszlopok = arr1_size + arr2_size;
   int **matrix;
@@ -218,85 +213,28 @@ struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
       leftover = (int)(current_mult / 10);
       matrix[sorok - 1 - i][oszlopok - 1 - j - i] =
           current_mult - (leftover * 10);
-      printf("[%d][%d] = %d (%d*%d) left: %d\n", sorok - 1 - i,
-             oszlopok - 1 - j, current_mult - (leftover * 10), arr2[arr2_i - i],
-             arr1[arr1_i - j], leftover);
+      /*
+  printf("[%d][%d] = %d (%d*%d) left: %d\n", sorok - 1 - i,
+         oszlopok - 1 - j, current_mult - (leftover * 10), arr2[arr2_i - i],
+         arr1[arr1_i - j], leftover);
+         */
     }
     leftover = 0;
   }
   int *matrix_summed = calloc(oszlopok, sizeof(int));
   for (int i = 0; i < sorok; i++) {
     matrix_summed = sum(matrix_summed, matrix[i], oszlopok, oszlopok).res_arr;
-    //printf("%d", matrix[i]);
+    // printf("%d", matrix[i]);
   }
-  // sum(int *arr1, int *arr2, int arr1_size, int arr2_size)
+  /*
   printf("Matrix:\n");
   for (int i = 0; i < sorok; i++) {
     for (int j = 0; j < oszlopok; j++)
       printf("%d", matrix[i][j]);
     printf("\n");
   }
-
-  /*
-    // left padding the shorter input array with 0's
-    if (arr1_size < longer_size) {
-      for (i = 0; i <= arr1_i; i++) {
-        tmp_arr[longer_i - i] = arr1[arr1_i - i];
-      }
-
-      arr1_size = longer_size;
-      arr1 = realloc(tmp_arr, arr1_size * sizeof(int));
-      if (arr1 == NULL) {
-        fprintf(stderr, "Array not reallocated");
-      }
-    } else if (arr2_size < longer_size) {
-      for (i = 0; i <= arr2_i; i++) {
-        tmp_arr[longer_i - i] = arr2[arr2_i - i];
-      }
-
-      arr2_size = longer_size;
-      arr2 = realloc(tmp_arr, arr2_size * sizeof(int));
-      if (arr2 == NULL) {
-        fprintf(stderr, "Array not reallocated");
-      }
-    }
-
-    int res_arr_size = longer_size * 2;
-
-    res_arr = calloc(res_arr_size, sizeof(int));
-    int leftover = 0;
-    int current_mult = 0;
-    struct MyResult res;
-
-    int *add1 = calloc(longer_size + 1, sizeof(int));
-    int *add2 = calloc(res_arr_size, sizeof(int));
-    int j;
-    int thens;
-    struct MyResult add_res;
-    j = 1;
-    // for (j = 0; j < longer_size; j++) {
-    for (i = 0; i < longer_size; i++) {
-      current_mult = arr1[longer_size - 1 - i] * arr2[j];
-      printf("%d*%d=%d\n", arr1[longer_size - 1 - i], arr2[j], current_mult);
-      // cuz i cant use '%' operator i need to do it by hand
-
-      add1[longer_size - i] =
-          (current_mult - (10 * ((int)(current_mult / 10)))) + leftover;
-      leftover = (int)(current_mult / 10);
-      printf("leirom a %d továbbviszek %d\n", add1[longer_size - i], leftover);
-    }
-    if (leftover != 0) {
-      add1[0] = leftover;
-    }
-    add2 = add1;
   */
-  // TODO: this
-  // add_res = sum(add1, add2, longer_size + 1, res_arr_size);
-  // res_arr_size = add_res.res_arr_size;
-  // sum(int *arr1, int *arr2, int arr1_size, int arr2_size) {
-  //}
-  // arr1_size = (int)(32 / 10);
-  // return result array and its lenght as a struct
+
   felszabaditMatrix(sorok, oszlopok, matrix);
   res.res_arr = matrix_summed;
   res.res_arr_size = oszlopok;
