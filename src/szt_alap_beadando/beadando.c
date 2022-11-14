@@ -34,6 +34,7 @@ Dr. Fodor Attila, Dr. Görbe Péter (Pannon Egyetem)A számítástechnika alapja
 *******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
+
 // result array and its lenght as a struct
 struct MyResult {
   int *res_arr;
@@ -239,35 +240,46 @@ struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   res.is_negative = 0;
   return res;
 }
+
 struct MyResult divide(int *arr1, int *arr2, int arr1_size, int arr2_size) {
 
   // return result array and its lenght as a struct
   struct MyResult res;
   int res_arr_size = 0;
   int *res_arr = calloc(res_arr_size, sizeof(int));
-  int num1 = 0;
-  int i;
-  for (i = 0; i < arr1_size; i++)
-    num1 = 10 * num1 + arr1[i];
+  int ans = 0;
+  int divisor = 0;
+  int i, j;
+  for (i = 0; i < arr2_size; i++)
+    divisor = 10 * divisor + arr2[i];
 
-  int arr_2_i = 0;
-  int num2 = arr2[0];
-  int is_done = 0;
-  while (is_done == 0) {
-    if (num2 / num1 >= 1) {
-      res_arr_size++;
-      res_arr = realloc(res_arr, res_arr_size * sizeof(int));
-      if (res_arr == NULL) {
-        fprintf(stderr, "Array not reallocated");
-      }
-      res_arr[i] = (int)(c)-48;
-    } else {
-      num2 = (num2 * 10) +
+  int arr1_i = 0;
+  int tmp = arr1[arr1_i];
+  while (tmp < divisor) {
+    arr1_i++;
+    tmp = tmp * 10 + arr1[arr1_i];
+  }
+  while (arr1_i < arr1_size) {
+    ans = ans * 10 + (int)(tmp / divisor);
+    res_arr_size++;
+    res_arr = realloc(res_arr, res_arr_size * sizeof(int));
+    if (res_arr == NULL) {
+      fprintf(stderr, "Array not reallocated");
     }
+    arr1_i++;
+    tmp = (tmp - (divisor * (tmp / divisor))) * 10 + arr1[arr1_i];
   }
 
-  res.res_arr = arr1;
-  res.res_arr_size = arr1_size;
+  // printf("%d", ans);
+
+  // convert ans to array
+  for (i = 0; i < res_arr_size; i++) {
+    res_arr[res_arr_size - 1 - i] = (ans - (10 * (ans / 10)));
+    ans /= 10;
+  }
+
+  res.res_arr = res_arr;
+  res.res_arr_size = res_arr_size;
   res.is_negative = 0;
   return res;
 }
