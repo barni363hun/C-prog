@@ -175,12 +175,6 @@ struct MyResult subtract(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   return res;
 }
 
-void felszabaditMatrix(int sorok, int oszlopok, int **matrix) {
-  for (int i = 0; i < sorok; i++)
-    free(matrix[i]);
-  free(matrix);
-}
-
 int **bekerMatrix(int sorok, int oszlopok) {
   int **matrix = (int **)malloc(sizeof(int *) * sorok);
   for (int i = 0; i < sorok; i++)
@@ -192,6 +186,11 @@ int **bekerMatrix(int sorok, int oszlopok) {
       matrix[i][j] = 0;
   }
   return matrix;
+}
+void felszabaditMatrix(int sorok, int oszlopok, int **matrix) {
+  for (int i = 0; i < sorok; i++)
+    free(matrix[i]);
+  free(matrix);
 }
 
 struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
@@ -206,7 +205,7 @@ struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   int oszlopok = arr1_size + arr2_size;
   int **matrix;
   matrix = bekerMatrix(sorok, oszlopok);
-
+  // creating matrix like you would on paper
   for (int i = 0; i < arr2_size; i++) {
     for (int j = 0; j < arr1_size + 1; j++) {
       current_mult = (arr2[arr2_i - i] * arr1[arr1_i - j]) + leftover;
@@ -224,16 +223,14 @@ struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   int *matrix_summed = calloc(oszlopok, sizeof(int));
   for (int i = 0; i < sorok; i++) {
     matrix_summed = sum(matrix_summed, matrix[i], oszlopok, oszlopok).res_arr;
-    // printf("%d", matrix[i]);
   }
-  /*
+
   printf("Matrix:\n");
   for (int i = 0; i < sorok; i++) {
     for (int j = 0; j < oszlopok; j++)
       printf("%d", matrix[i][j]);
     printf("\n");
   }
-  */
 
   felszabaditMatrix(sorok, oszlopok, matrix);
   res.res_arr = matrix_summed;
@@ -348,8 +345,8 @@ int main() {
 
   // write out result without leading 0's
   for (i = 0; i < result.res_arr_size; i++) {
-    is_leading_0s_ended = 1;
     if (((result.res_arr[i]) + '0') != '0') {
+      is_leading_0s_ended = 1;
     }
     if (is_leading_0s_ended) {
       fputc((result.res_arr[i]) + '0', ofp);
