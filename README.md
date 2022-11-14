@@ -1,6 +1,6 @@
 # C prog
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/barni363hun/prog1)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/barni363hun/C-prog)
 
 ## run program with: ctrl+alt+N
 
