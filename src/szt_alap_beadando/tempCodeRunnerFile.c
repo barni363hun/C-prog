@@ -1,6 +1,4 @@
-
-  do {
-    res.res_arr[i] = (ans - (10 * (ans / 10)));
-    ans /= 10;
-    i++;
-  } while (ans != 0);
+res_arr = realloc(res_arr, (res_arr_size + 1) * sizeof(int));
+    // if (res_arr == NULL) {
+    //   fprintf(stderr, "Array not reallocated");
+    // }

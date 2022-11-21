@@ -32,6 +32,7 @@ Dr. Fodor Attila, Dr. Görbe Péter (Pannon Egyetem)A számítástechnika alapja
 2022. 3 / 3
 
 *******************************************************************************/
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -45,39 +46,53 @@ struct MyResult {
 struct MyResult sum(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   // init
   int *res_arr;
-  int res_arr_size = (arr1_size > arr2_size) ? arr1_size : arr2_size;
+  int res_arr_size = ((arr1_size > arr2_size) ? arr1_size : arr2_size) + 1;
   res_arr = calloc(res_arr_size, sizeof(int));
   int arr1_i = arr1_size - 1;
   int arr2_i = arr2_size - 1;
   int res_arr_i = res_arr_size - 1;
   int leftover = 0;
   int current_sum = 0;
-  int *tmp_arr = calloc(res_arr_size, sizeof(int));
+  int *tmp_arr1 = calloc(res_arr_size, sizeof(int));
+  int *tmp_arr2 = calloc(res_arr_size, sizeof(int));
   int i;
   struct MyResult res;
-
   // left padding the shorter input array with 0's
+
   if (arr1_size < res_arr_size) {
     for (i = 0; i <= arr1_i; i++) {
-      tmp_arr[res_arr_i - i] = arr1[arr1_i - i];
+      tmp_arr1[res_arr_i - i] = arr1[arr1_i - i];
     }
 
     arr1_size = res_arr_size;
-    arr1 = realloc(tmp_arr, arr1_size * sizeof(int));
+    arr1 = realloc(tmp_arr1, arr1_size * sizeof(int));
     if (arr1 == NULL) {
       fprintf(stderr, "Array not reallocated");
     }
-  } else if (arr2_size < res_arr_size) {
+  }
+
+  if (arr2_size < res_arr_size) {
     for (i = 0; i <= arr2_i; i++) {
-      tmp_arr[res_arr_i - i] = arr2[arr2_i - i];
+      tmp_arr2[res_arr_i - i] = arr2[arr2_i - i];
     }
 
     arr2_size = res_arr_size;
-    arr2 = realloc(tmp_arr, arr2_size * sizeof(int));
+    arr2 = realloc(tmp_arr2, arr2_size * sizeof(int));
     if (arr2 == NULL) {
       fprintf(stderr, "Array not reallocated");
     }
   }
+  // printf("r:%d, 1:%d, 2:%d\n", res_arr_size, arr1_size, arr2_size);
+  // for (i = 0; i < arr1_size; i++) {
+  //   printf("%d", arr1[i]);
+  // }
+  // printf("\n");
+  // for (i = 0; i < arr2_size; i++) {
+  //   printf("%d", arr2[i]);
+  // }
+  // printf("\n");
+
+  // left padding the longer input array with 0's
 
   // add the two arrays like you would on paper
   while (res_arr_i >= 0) {
@@ -93,6 +108,7 @@ struct MyResult sum(int *arr1, int *arr2, int arr1_size, int arr2_size) {
     // res_arr[res_arr_i]);
     res_arr_i = res_arr_i - 1;
   }
+  // printf("%d", leftover);
   // return result array and its lenght as a struct
   res.res_arr = res_arr;
   res.res_arr_size = res_arr_size;
@@ -242,49 +258,52 @@ struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
 }
 
 struct MyResult divide(int *arr1, int *arr2, int arr1_size, int arr2_size) {
-
-  // return result array and its lenght as a struct
   struct MyResult res;
-  int res_arr_size = 0;
-  int *res_arr = calloc(res_arr_size, sizeof(int));
-  int ans = 0;
-  int divisor = 0;
-  int i, j;
 
-  // make the divisor from the array
-  for (i = 0; i < arr2_size; i++)
-    divisor = 10 * divisor + arr2[i];
+  /*
+    // return result array and its lenght as a struct
+    struct MyResult res;
+    int res_arr_size = 0;
+    int *res_arr = calloc(res_arr_size, sizeof(int));
+    int ans = 0;
+    int divisor = 0;
+    int i, j;
 
-  int arr1_i = 0;
-  int tmp = arr1[arr1_i];
+    // make the divisor from the array
+    for (i = 0; i < arr2_size; i++)
+      divisor = 10 * divisor + arr2[i];
+    printf("%d", divisor);
+    int arr1_i = 0;
+    int tmp = arr1[arr1_i];
 
-  // find a big enough number to start the division with
-  while (tmp < divisor) {
-    arr1_i++;
-    tmp = tmp * 10 + arr1[arr1_i];
-  }
-  // divide like you would on paper
-  while (arr1_i < arr1_size) {
-    ans = ans * 10 + (int)(tmp / divisor);
-    res_arr_size++;
-    res_arr = realloc(res_arr, res_arr_size * sizeof(int));
-    if (res_arr == NULL) {
-      fprintf(stderr, "Array not reallocated");
+    // find a big enough number to start the division with
+    while (tmp < divisor) {
+      arr1_i++;
+      tmp = tmp * 10 + arr1[arr1_i];
     }
-    arr1_i++;
-    tmp = (tmp - (divisor * (tmp / divisor))) * 10 + arr1[arr1_i];
-  }
+    // divide like you would on paper
+    while (arr1_i < arr1_size) {
+      ans = ans * 10 + (int)(tmp / divisor);
+      res_arr_size++;
+      res_arr = realloc(res_arr, res_arr_size * sizeof(int));
+      if (res_arr == NULL) {
+        fprintf(stderr, "Array not reallocated");
+      }
+      arr1_i++;
+      tmp = (tmp - (divisor * (tmp / divisor))) * 10 + arr1[arr1_i];
+    }
 
-  // printf("%d", ans);
+    printf("%d", ans);
 
-  // convert ans to array
-  for (i = 0; i < res_arr_size; i++) {
-    res_arr[res_arr_size - 1 - i] = (ans - (10 * (ans / 10)));
-    ans /= 10;
-  }
+    // convert ans to array
+    for (i = 0; i < res_arr_size; i++) {
+      res_arr[res_arr_size - 1 - i] = (ans - (10 * (ans / 10)));
+      ans /= 10;
+    }
+    */
 
-  res.res_arr = res_arr;
-  res.res_arr_size = res_arr_size;
+  res.res_arr = arr1;
+  res.res_arr_size = arr1_size;
   res.is_negative = 0;
   return res;
 }
