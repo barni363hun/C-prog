@@ -281,14 +281,13 @@ struct MyResult divide(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   struct MyResult res;
   int res_arr_size = 0;
   int *res_arr = calloc(res_arr_size, sizeof(int));
-  int ans = 0;
-  int divisor = 0;
+  unsigned int ans = 0, divisor = 0;
   int i, j;
 
   // make the divisor from the array
   for (i = 0; i < arr2_size; i++)
     divisor = 10 * divisor + arr2[i];
-  // printf("%d", divisor);
+  printf("%d", divisor);
   int arr1_i = 0;
   int tmp = arr1[arr1_i];
 
@@ -320,6 +319,81 @@ struct MyResult divide(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   res.res_arr = res_arr;
   res.res_arr_size = res_arr_size;
   res.is_negative = 0;
+  return res;
+}
+
+struct MyResult remove_leading_zeros(int *arr1, int arr1_size) {
+  struct MyResult res;
+  res.res_arr = calloc(arr1_size, sizeof(int));
+
+  int i = 0;
+  int is_leading_0s_ended = 0;
+  while (is_leading_0s_ended == 0) {
+    if (arr1[i] == 0) {
+      // printf("true");
+      i++;
+    } else {
+      // printf("false");
+      is_leading_0s_ended = 1;
+    }
+  }
+  printf("i:%d\n", i);
+  printf("arr_size:%d\n", arr1_size);
+  res.res_arr_size = arr1_size - i;
+  res.res_arr = realloc(arr1, res.res_arr_size * sizeof(int));
+  res.is_negative = 0;
+  for (i = 0; i < res.res_arr_size; i++) {
+    printf("set %d. item to %d. item of arr (%d)\n", res.res_arr_size - i,
+           (arr1_size - i) - 1, arr1[(arr1_size - i) - 1]);
+    res.res_arr[(res.res_arr_size - i) - 1] = arr1[(arr1_size - i) - 1];
+  }
+  return res;
+}
+
+struct MyResult divide_by_subtraction(int *arr1, int *arr2, int arr1_size,
+                                      int arr2_size) {
+
+  struct MyResult res;
+  res.is_negative = 0;
+  res.res_arr = arr1;
+  res.res_arr_size = arr1_size;
+  int count = 0;
+  int i = 0;
+
+  for (i = 0; i < arr1_size; i++) {
+    printf("%d", arr1[i]);
+  }
+  printf("\n");
+  res = remove_leading_zeros(arr1, arr1_size);
+
+  for (i = 0; i < res.res_arr_size; i++) {
+    printf("%d", res.res_arr[i]);
+  }
+  printf("\n");
+
+  // if (res.is_negative != 1) {
+  //   res = subtract(res.res_arr, arr2, res.res_arr_size, arr2_size);
+  //   count++;
+
+  //   printf("%d - ", count);
+  //   for (i = 0; i < res.res_arr_size; i++) {
+  //     printf("%d", res.res_arr[i]);
+  //   }
+  //   printf("\n");
+  // }
+  /*
+  int res_arr_size = count;
+  int lenght_of_count = 0;
+  while (count / 10 > 1) {
+    count /= 10;
+    lenght_of_count++;
+  }
+  int *res_arr = calloc(lenght_of_count, sizeof(int));
+  for (i = 0; i < lenght_of_count; i++) {
+    res_arr[i] = count / (10 * lenght_of_count);
+  }
+  res.res_arr res.
+  */
   return res;
 }
 
@@ -410,7 +484,7 @@ int main() {
   } else if (operator== '*') {
     result = multiply(arr1, arr2, arr1_size, arr2_size);
   } else if (operator== '/') {
-    result = divide(arr1, arr2, arr1_size, arr2_size);
+    result = divide_by_subtraction(arr1, arr2, arr1_size, arr2_size);
   }
 
   // write a '-' sign if its neccessary

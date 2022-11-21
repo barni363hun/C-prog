@@ -1,2 +1,7 @@
-d=%d\n", arr1[res_arr_i], arr2[res_arr_i],
-    // res_arr[res_a
+while (is_leading_0s_ended == 0) {
+  //   if (arr1[i] == 0) {
+  //     i++;
+  //   } else {
+  //     is_leading_0s_ended = 1;
+  //   }
+  // }
