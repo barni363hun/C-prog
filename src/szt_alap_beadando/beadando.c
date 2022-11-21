@@ -361,40 +361,48 @@ struct MyResult divide_by_subtraction(int *arr1, int *arr2, int arr1_size,
   int count = 0;
   int i = 0;
 
-  // for (i = 0; i < arr1_size; i++) {
-  //   printf("%d", arr1[i]);
-  // }
-  // printf("\n");
-  // res = remove_leading_zeros(arr1, arr1_size);
-
-  // for (i = 0; i < res.res_arr_size; i++) {
-  //   printf("%d", res.res_arr[i]);
-  // }
-  // printf("\n");
-
   while (res.is_negative != 1) {
     res = subtract(res.res_arr, arr2, res.res_arr_size, arr2_size);
     count++;
     res = remove_leading_zeros(res);
-    printf("%d - ", count);
-    for (i = 0; i < res.res_arr_size; i++) {
-      printf("%d", res.res_arr[i]);
-    }
-    printf("\n");
+    // printf("%d - ", count);
+    // for (i = 0; i < res.res_arr_size; i++) {
+    //   printf("%d", res.res_arr[i]);
+    // }
+    // printf("\n");
   }
-  /*
-  int res_arr_size = count;
+  printf("count=%d\n", count);
+
+  int curr_count = count;
   int lenght_of_count = 0;
-  while (count / 10 > 1) {
+  while (count / 10 >= 1) {
     count /= 10;
     lenght_of_count++;
   }
-  int *res_arr = calloc(lenght_of_count, sizeof(int));
-  for (i = 0; i < lenght_of_count; i++) {
-    res_arr[i] = count / (10 * lenght_of_count);
+  count = curr_count;
+  printf("lc=%d\n", lenght_of_count);
+  int *res_arr = calloc(lenght_of_count + 1, sizeof(int));
+  int res_arr_size = lenght_of_count + 1;
+  // convert ans to array
+  for (i = 0; i < res_arr_size; i++) {
+    res_arr[res_arr_size - 1 - i] = (count - (10 * (count / 10)));
+    count /= 10;
   }
-  res.res_arr res.
-  */
+  res.res_arr = res_arr;
+  res.res_arr_size = res_arr_size;
+  res.is_negative = 0;
+  // for (i = 0; i < lenght_of_count + 1; i++) {
+  //   // leftover = count % 10;
+  //   current_mult
+  //   res_arr[(lenght_of_count)-i] = count % ();
+  //   printf("%d. is set to %d\n", (lenght_of_count)-i, count % 10);
+  //   printf("%d. is %d\n", i, res_arr[i]);
+  //   // leftover = (count % (10 * (i + 1))) - leftover_sum;
+  //   // printf("leftover = %d - %d\n", leftover, leftover_sum);
+  //   // leftover_sum += leftover;
+  // }
+  // // res.res_arr = res.
+
   return res;
 }
 
