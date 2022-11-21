@@ -1,4 +1,2 @@
-res_arr = realloc(res_arr, (res_arr_size + 1) * sizeof(int));
-    // if (res_arr == NULL) {
-    //   fprintf(stderr, "Array not reallocated");
-    // }
+d=%d\n", arr1[res_arr_i], arr2[res_arr_i],
+    // res_arr[res_a

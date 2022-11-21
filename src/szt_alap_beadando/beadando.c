@@ -216,44 +216,63 @@ struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   int arr2_i = arr2_size - 1;
   int i, j;
   struct MyResult res;
+  struct MyResult curr_res;
   int leftover = 0;
   int current_mult;
   int sorok = arr2_size;
   int oszlopok = arr1_size + arr2_size;
   int **matrix;
   matrix = bekerMatrix(sorok, oszlopok);
+  printf("sorok: %d, oszlopok: %d\n", sorok, oszlopok);
   // creating matrix like you would on paper
   for (int i = 0; i < arr2_size; i++) {
     for (int j = 0; j < arr1_size + 1; j++) {
+
       current_mult = (arr2[arr2_i - i] * arr1[arr1_i - j]) + leftover;
+
       // because i cant use '%' operator i need to do it by hand
       leftover = (int)(current_mult / 10);
       matrix[sorok - 1 - i][oszlopok - 1 - j - i] =
           current_mult - (leftover * 10);
       /*
-  printf("[%d][%d] = %d (%d*%d) leftover: %d\n", sorok - 1 - i,
-         oszlopok - 1 - j, current_mult - (leftover * 10), arr2[arr2_i - i],
-         arr1[arr1_i - j], leftover);
-         */
+            printf("[%d][%d] = %d (%d*%d) leftover: %d\n", sorok - 1 - i,
+                   oszlopok - 1 - j, current_mult - (leftover * 10), arr2[arr2_i
+         - i], arr1[arr1_i - j], leftover);
+                   */
     }
     leftover = 0;
   }
-  int *matrix_summed = calloc(oszlopok, sizeof(int));
-  for (int i = 0; i < sorok; i++) {
-    matrix_summed = sum(matrix_summed, matrix[i], oszlopok, oszlopok).res_arr;
-  }
-  /*
-    printf("Matrix:\n");
-    for (int i = 0; i < sorok; i++) {
-      for (int j = 0; j < oszlopok; j++)
-        printf("%d", matrix[i][j]);
-      printf("\n");
+  
+  curr_res.res_arr = calloc(oszlopok + 1, sizeof(int));
+  curr_res.res_arr = matrix[0];
+  curr_res.res_arr_size = oszlopok;
+  
+  for (int i = 0; i < sorok - 1; i++) {
+    printf("\n");
+    for (int j = 0; j < curr_res.res_arr_size; j++) {
+      printf("%d", curr_res.res_arr[j]);
     }
-  */
+    curr_res.res_arr =
+        realloc(curr_res.res_arr, (curr_res.res_arr_size + 1) * sizeof(int));
+    if (curr_res.res_arr == NULL) {
+      fprintf(stderr, "Array not reallocated");
+    }
+
+    curr_res =
+        sum(curr_res.res_arr, matrix[i + 1], curr_res.res_arr_size, oszlopok);
+  }
+  
+  printf("\n");
+
+  printf("Matrix:\n");
+  for (int i = 0; i < sorok; i++) {
+    for (int j = 0; j < oszlopok; j++)
+      printf("%d", matrix[i][j]);
+    printf("\n");
+  }
+
   felszabaditMatrix(sorok, oszlopok, matrix);
-  res.res_arr = matrix_summed;
-  res.res_arr_size = oszlopok;
-  res.is_negative = 0;
+  res = curr_res;
   return res;
 }
 
