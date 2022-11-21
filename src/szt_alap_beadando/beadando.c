@@ -258,52 +258,48 @@ struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
 }
 
 struct MyResult divide(int *arr1, int *arr2, int arr1_size, int arr2_size) {
+  // return result array and its lenght as a struct
   struct MyResult res;
+  int res_arr_size = 0;
+  int *res_arr = calloc(res_arr_size, sizeof(int));
+  int ans = 0;
+  int divisor = 0;
+  int i, j;
 
-  /*
-    // return result array and its lenght as a struct
-    struct MyResult res;
-    int res_arr_size = 0;
-    int *res_arr = calloc(res_arr_size, sizeof(int));
-    int ans = 0;
-    int divisor = 0;
-    int i, j;
+  // make the divisor from the array
+  for (i = 0; i < arr2_size; i++)
+    divisor = 10 * divisor + arr2[i];
+  // printf("%d", divisor);
+  int arr1_i = 0;
+  int tmp = arr1[arr1_i];
 
-    // make the divisor from the array
-    for (i = 0; i < arr2_size; i++)
-      divisor = 10 * divisor + arr2[i];
-    printf("%d", divisor);
-    int arr1_i = 0;
-    int tmp = arr1[arr1_i];
-
-    // find a big enough number to start the division with
-    while (tmp < divisor) {
-      arr1_i++;
-      tmp = tmp * 10 + arr1[arr1_i];
+  // find a big enough number to start the division with
+  while (tmp < divisor) {
+    arr1_i++;
+    tmp = tmp * 10 + arr1[arr1_i];
+  }
+  // divide like you would on paper
+  while (arr1_i < arr1_size) {
+    ans = ans * 10 + (int)(tmp / divisor);
+    res_arr_size++;
+    res_arr = realloc(res_arr, res_arr_size * sizeof(int));
+    if (res_arr == NULL) {
+      fprintf(stderr, "Array not reallocated");
     }
-    // divide like you would on paper
-    while (arr1_i < arr1_size) {
-      ans = ans * 10 + (int)(tmp / divisor);
-      res_arr_size++;
-      res_arr = realloc(res_arr, res_arr_size * sizeof(int));
-      if (res_arr == NULL) {
-        fprintf(stderr, "Array not reallocated");
-      }
-      arr1_i++;
-      tmp = (tmp - (divisor * (tmp / divisor))) * 10 + arr1[arr1_i];
-    }
+    arr1_i++;
+    tmp = (tmp - (divisor * (tmp / divisor))) * 10 + arr1[arr1_i];
+  }
 
-    printf("%d", ans);
+  // printf("%d", ans);
 
-    // convert ans to array
-    for (i = 0; i < res_arr_size; i++) {
-      res_arr[res_arr_size - 1 - i] = (ans - (10 * (ans / 10)));
-      ans /= 10;
-    }
-    */
+  // convert ans to array
+  for (i = 0; i < res_arr_size; i++) {
+    res_arr[res_arr_size - 1 - i] = (ans - (10 * (ans / 10)));
+    ans /= 10;
+  }
 
-  res.res_arr = arr1;
-  res.res_arr_size = arr1_size;
+  res.res_arr = res_arr;
+  res.res_arr_size = res_arr_size;
   res.is_negative = 0;
   return res;
 }
