@@ -327,26 +327,48 @@ struct MyResult remove_leading_zeros(struct MyResult input) {
   int *arr1 = input.res_arr;
   int arr1_size = input.res_arr_size;
   res.res_arr = calloc(arr1_size, sizeof(int));
+  int number_of_0s = 0;
   int i = 0;
   int is_leading_0s_ended = 0;
   while (is_leading_0s_ended == 0) {
-    if (arr1[i] == 0) {
-      // printf("true");
-      i++;
+    if (arr1[number_of_0s] == 0) {
+      number_of_0s++;
     } else {
-      // printf("false");
       is_leading_0s_ended = 1;
     }
   }
-  // printf("i:%d\n", i);
-  // printf("arr_size:%d\n", arr1_size);
-  res.res_arr_size = arr1_size - i;
+
+  printf("arr1: ");
+  for (i = 0; i < arr1_size; i++) {
+    printf("%d", arr1[i]);
+  }
+  printf("\n");
+
+  printf("number_of_0s:%d\n", number_of_0s);
+  printf("arr_size:%d\n", arr1_size);
+  res.res_arr_size = arr1_size - number_of_0s;
   res.res_arr = realloc(arr1, res.res_arr_size * sizeof(int));
   res.is_negative = input.is_negative;
+
+  printf("res.res_arr: ");
   for (i = 0; i < res.res_arr_size; i++) {
-    // printf("set %d. item to %d. item of arr (%d)\n", res.res_arr_size - i,
-    //        (arr1_size - i) - 1, arr1[(arr1_size - i) - 1]);
-    res.res_arr[(res.res_arr_size - i) - 1] = arr1[(arr1_size - i) - 1];
+    printf("%d", res.res_arr[i]);
+  }
+  printf("\n");
+
+  printf("---1. item of arr1: %d\n", arr1[1]);
+  for (i = 0; i < res.res_arr_size; i++) {
+    printf("res_arr[%d] = %d\n", (res.res_arr_size - i) - 1,
+           res.res_arr[(res.res_arr_size - i) - 1]);
+
+    printf("arr1[%d] = %d\n", res.res_arr_size - i, arr1[res.res_arr_size - i]);
+
+    // printf("set %d. item to %d. item of arr1 (%d)\n",
+    //        (res.res_arr_size - i) - 1, res.res_arr_size - i,
+    //        arr1[res.res_arr_size - i]);
+
+    // ha az alábbi sort kiveszem más lesz az eredmény mint ha nem !!!!
+    // res.res_arr[(res.res_arr_size - i) - 1] = arr1[res.res_arr_size - i];
   }
   return res;
 }
@@ -361,36 +383,36 @@ struct MyResult divide_by_subtraction(int *arr1, int *arr2, int arr1_size,
   int count = 0;
   int i = 0;
 
-  while (res.is_negative != 1) {
+  if (res.is_negative != 1) {
     res = subtract(res.res_arr, arr2, res.res_arr_size, arr2_size);
     count++;
+    printf("%d - ", count);
+    for (i = 0; i < res.res_arr_size; i++) {
+      printf("%d", res.res_arr[i]);
+    }
+    printf("\n");
     res = remove_leading_zeros(res);
-    // printf("%d - ", count);
-    // for (i = 0; i < res.res_arr_size; i++) {
-    //   printf("%d", res.res_arr[i]);
-    // }
-    // printf("\n");
   }
-  printf("count=%d\n", count);
+  // printf("count=%d\n", count);
 
-  int curr_count = count;
-  int lenght_of_count = 0;
-  while (count / 10 >= 1) {
-    count /= 10;
-    lenght_of_count++;
-  }
-  count = curr_count;
-  printf("lc=%d\n", lenght_of_count);
-  int *res_arr = calloc(lenght_of_count + 1, sizeof(int));
-  int res_arr_size = lenght_of_count + 1;
-  // convert ans to array
-  for (i = 0; i < res_arr_size; i++) {
-    res_arr[res_arr_size - 1 - i] = (count - (10 * (count / 10)));
-    count /= 10;
-  }
-  res.res_arr = res_arr;
-  res.res_arr_size = res_arr_size;
-  res.is_negative = 0;
+  // int curr_count = count;
+  // int lenght_of_count = 0;
+  // while (count / 10 >= 1) {
+  //   count /= 10;
+  //   lenght_of_count++;
+  // }
+  // count = curr_count;
+  // printf("lc=%d\n", lenght_of_count);
+  // int *res_arr = calloc(lenght_of_count + 1, sizeof(int));
+  // int res_arr_size = lenght_of_count + 1;
+  // // convert ans to array
+  // for (i = 0; i < res_arr_size; i++) {
+  //   res_arr[res_arr_size - 1 - i] = (count - (10 * (count / 10)));
+  //   count /= 10;
+  // }
+  // res.res_arr = res_arr;
+  // res.res_arr_size = res_arr_size;
+  // res.is_negative = 0;
   // for (i = 0; i < lenght_of_count + 1; i++) {
   //   // leftover = count % 10;
   //   current_mult
