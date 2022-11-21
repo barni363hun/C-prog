@@ -223,7 +223,7 @@ struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   int oszlopok = arr1_size + arr2_size;
   int **matrix;
   matrix = bekerMatrix(sorok, oszlopok);
-  printf("sorok: %d, oszlopok: %d\n", sorok, oszlopok);
+  // printf("sorok: %d, oszlopok: %d\n", sorok, oszlopok);
   // creating matrix like you would on paper
   for (int i = 0; i < arr2_size; i++) {
     for (int j = 0; j < arr1_size + 1; j++) {
@@ -242,16 +242,16 @@ struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
     }
     leftover = 0;
   }
-  
+
   curr_res.res_arr = calloc(oszlopok + 1, sizeof(int));
   curr_res.res_arr = matrix[0];
   curr_res.res_arr_size = oszlopok;
-  
+
   for (int i = 0; i < sorok - 1; i++) {
-    printf("\n");
-    for (int j = 0; j < curr_res.res_arr_size; j++) {
-      printf("%d", curr_res.res_arr[j]);
-    }
+    // printf("\n");
+    // for (int j = 0; j < curr_res.res_arr_size; j++) {
+    //   printf("%d", curr_res.res_arr[j]);
+    // }
     curr_res.res_arr =
         realloc(curr_res.res_arr, (curr_res.res_arr_size + 1) * sizeof(int));
     if (curr_res.res_arr == NULL) {
@@ -261,15 +261,15 @@ struct MyResult multiply(int *arr1, int *arr2, int arr1_size, int arr2_size) {
     curr_res =
         sum(curr_res.res_arr, matrix[i + 1], curr_res.res_arr_size, oszlopok);
   }
-  
-  printf("\n");
 
-  printf("Matrix:\n");
-  for (int i = 0; i < sorok; i++) {
-    for (int j = 0; j < oszlopok; j++)
-      printf("%d", matrix[i][j]);
-    printf("\n");
-  }
+  // printf("\n");
+
+  // printf("Matrix:\n");
+  // for (int i = 0; i < sorok; i++) {
+  //   for (int j = 0; j < oszlopok; j++)
+  //     printf("%d", matrix[i][j]);
+  //   printf("\n");
+  // }
 
   felszabaditMatrix(sorok, oszlopok, matrix);
   res = curr_res;
