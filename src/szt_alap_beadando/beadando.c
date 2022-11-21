@@ -287,7 +287,7 @@ struct MyResult divide(int *arr1, int *arr2, int arr1_size, int arr2_size) {
   // make the divisor from the array
   for (i = 0; i < arr2_size; i++)
     divisor = 10 * divisor + arr2[i];
-  printf("%d", divisor);
+  // printf("%d", divisor);
   int arr1_i = 0;
   int tmp = arr1[arr1_i];
 
@@ -515,7 +515,7 @@ int main() {
   } else if (operator== '*') {
     result = multiply(arr1, arr2, arr1_size, arr2_size);
   } else if (operator== '/') {
-    result = divide_by_subtraction(arr1, arr2, arr1_size, arr2_size);
+    result = divide(arr1, arr2, arr1_size, arr2_size);
   }
 
   // write a '-' sign if its neccessary
