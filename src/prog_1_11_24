@@ -90,13 +90,33 @@ int main()
         scanf("%d%s%d%d%lf%lf",&telepulesek[i].id,&telepulesek[i].nev,&telepulesek[i].terulet,&telepulesek[i].lakossag,&telepulesek[i].eszaki_szelesseg,&telepulesek[i].keleti_hosszusag);
         telepulesek[i] = telepulesek[i];
     }
-    printf("50000 felett: %d\n",hanynagyobb(telepulesek,lenght,50000));
-    printf("össz terület: %d\n", osszterulet(telepulesek,lenght));
-    telepulesek = rendez(telepulesek,lenght);
+    //printf("50000 felett: %d\n",hanynagyobb(telepulesek,lenght,50000));
+    //printf("össz terület: %d\n", osszterulet(telepulesek,lenght));
+    //telepulesek = rendez(telepulesek,lenght);
     //kiir(telepulesek,lenght);
     //ki1(keres(telepulesek,lenght,lenght-1));
-    printf("%s %d",telepulesek[0].nev, telepulesek[0].lakossag);
+    //printf("%s %d",telepulesek[0].nev, telepulesek[0].lakossag);
+
+    int lakossag_szam = 50000;
+    struct telepules* selected = (struct telepules*)malloc( sizeof(struct telepules));
+    struct telepules* tmp;
+    int db = 0;
+    for (i=0;i<lenght;i++) {
+        if(telepulesek[i].lakossag>lakossag_szam){
+
+            tmp = selected;
+            //free(selected);
+            selected = (struct telepules*)malloc( sizeof(struct telepules) * (i+1));
+            selected = tmp;
+            selected[db] = telepulesek[i];
+            db++;
+        }
+    }
+
+    kiir(selected, db);
+
     free(telepulesek);
+    free(selected);
     return 0;
 }
 
