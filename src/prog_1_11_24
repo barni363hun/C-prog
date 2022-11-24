@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// 33604 Ujtelek 956 345 46.5890947 19.0579332
+struct telepules{
+    int id;
+    char nev[31];
+    int terulet;
+    int lakossag;
+    double eszaki_szelesseg;
+    double keleti_hosszusag
+};
+
+
+void kiir(struct telepules* telepulesek,int lenght){
+    int i;
+    for (i = 0;i<lenght;i++) {
+        printf("%d %s %d %d %.2lf %.2lf\n",telepulesek[i].id,telepulesek[i].nev,telepulesek[i].terulet,telepulesek[i].lakossag,telepulesek[i].eszaki_szelesseg,telepulesek[i].keleti_hosszusag);
+    }
+}
+
+struct telepules* keres(struct telepules* telepulesek,int lenght, int id){
+    if(id>=0&&id<lenght){
+        return telepulesek+id;
+    }
+    else {
+        return NULL;
+    }
+}
+
+void ki1(struct telepules* t){
+    if(t == NULL){
+        printf("NULL");
+    }
+    else{
+        printf("%d %s %d %d %.2lf %.2lf\n",(*t).id,(*t).nev,(*t).terulet,(*t).lakossag,(*t).eszaki_szelesseg,(*t).keleti_hosszusag);
+    }
+}
+
+
+int main()
+{
+
+    int lenght;
+    scanf("%d",&lenght);
+    //printf("%d",lenght);
+    struct telepules* telepulesek = (struct telepules*)malloc( sizeof(struct telepules) * lenght );
+    int i;
+    for (i = 0;i<lenght;i++) {
+        scanf("%d%s%d%d%lf%lf",&telepulesek[i].id,&telepulesek[i].nev,&telepulesek[i].terulet,&telepulesek[i].lakossag,&telepulesek[i].eszaki_szelesseg,&telepulesek[i].keleti_hosszusag);
+        telepulesek[i] = telepulesek[i];
+    }
+    //kiir(telepulesek,lenght);
+    ki1(keres(telepulesek,lenght,lenght-1));
+    //printf("%s",t1.nev);
+    free(telepulesek);
+    return 0;
+}
+
